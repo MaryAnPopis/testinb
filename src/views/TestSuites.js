@@ -39,7 +39,7 @@ export class TestSuites extends Component {
         {this.state.fetchInProgress && <Loader color={colors.black} />}
         <MenuBar />
         <div className="container">
-          <h1>{this.state.projectTitle} Test Suites</h1>
+          <h1>{this.state.projectTitle} Test Suites list</h1>
           <AddProject>
             <AddLink to="/add/testsuite">
               <img src="https://app.hiptest.com/assets/on-boarding/icon-plus.svg" alt="" />
