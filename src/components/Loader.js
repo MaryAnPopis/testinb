@@ -5,12 +5,13 @@ import { colors } from '../styles/colors'
 
 class Loader extends Component {
   render() {
+    const { color } = this.props
     return (
       <Styles.Div>
         <Styles.SVG viewBox="0 0 100 100">
           <circle
             fill="none"
-            stroke={`${colors.grey}`}
+            stroke={`${color}`}
             strokeWidth={4}
             cx={50}
             cy={50}

@@ -9,6 +9,7 @@ import Input from '../components/Input'
 import Label from '../components/Label'
 import Button from '../components/Button'
 import Loader from '../components/Loader'
+import { colors } from '../styles/colors'
 import { upload, post, patch } from '../services'
 
 class Signup extends Component {
@@ -90,7 +91,7 @@ class Signup extends Component {
               idGroup: data.insertId,
             }
             patch(`user/${this.state.idOwner}`, idGroup)
-
+            this.props.initializeGroup(idGroup)
             this.setState({
               idGroup: data.insertId,
               redirect: true,
@@ -106,9 +107,9 @@ class Signup extends Component {
     return (
       <main className="bg-dark ">
         {this.state.redirect ? (
-          <Redirect to={`/home/${this.state.idGroup}`} />
+          <Redirect to={`/home`} />
         ) : (
-          this.state.fetchInProgress && <Loader />
+          this.state.fetchInProgress && <Loader color={colors.grey} />
         )}
         <div
           className="container"

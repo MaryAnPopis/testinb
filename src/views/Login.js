@@ -1,19 +1,77 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { ToastContainer, toast } from 'react-toastify'
 
+import { post, getByParam } from '../services'
 import Input from '../components/Input'
 import Label from '../components/Label'
 import Button from '../components/Button'
-
+import { initialize_group } from '../actions'
+import Loader from '../components/Loader'
+import { colors } from '../styles/colors'
 class Login extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      email: '',
+      password: '',
+      redirect: false,
+      fetchInProgress: false,
+    }
+  }
+
+  handldeChange(e) {
+    const { name, value } = e.target
+    this.setState({
+      [name]: value,
+    })
+  }
+
   handleSubmit(e) {
     e.preventDefault()
+
+    const user = {
+      email: this.state.email,
+      password: this.state.password,
+    }
+    post('user/autho', user)
+      .then(data => {
+        if (data.found) {
+          this.setState({
+            fetchInProgress: true,
+          })
+          getByParam('user', data.id).then(data => {
+            const idGroup = {
+              idGroup: data[0].idGroup,
+            }
+            this.props.initializeGroup(idGroup)
+            this.setState({
+              redirect: true,
+            })
+          })
+          sessionStorage.setItem('user', JSON.stringify({ isLogged: true }))
+        } else {
+          toast.error('Username or password is invalid!', {
+            position: 'bottom-right',
+            autoClose: 5000,
+          })
+        }
+      })
+      .catch(err => {
+        throw err
+      })
   }
   render() {
     return (
       <main className="bg-dark height-vh">
+        <ToastContainer />
+        {this.state.redirect ? (
+          <Redirect to={`/home`} />
+        ) : (
+          this.state.fetchInProgress && <Loader color={colors.grey} />
+        )}
         <div className="container">
           <Logo>
             <svg xmlns="http://www.w3.org/2000/svg" width="200" height="133" viewBox="0 0 373 133">
@@ -22,8 +80,8 @@ class Login extends Component {
                   id="testinb"
                   transform="translate(242 168)"
                   fill="#f8f8f8"
-                  font-size="100"
-                  font-family="SegoeUI, Segoe UI"
+                  fontSize="100"
+                  fontFamily="SegoeUI, Segoe UI"
                 >
                   <tspan x="0" y="0">
                     testin
@@ -54,11 +112,23 @@ class Login extends Component {
               </div>
               <div className="form-control">
                 <Label name="Email" />
-                <Input type="text" placeholder="email" />
+                <Input
+                  type="text"
+                  placeholder="email"
+                  value={this.state.email}
+                  name="email"
+                  onChange={e => this.handldeChange(e)}
+                />
               </div>
               <div className="form-control">
                 <Label name="Password" />
-                <Input type="password" placeholder="**********" />
+                <Input
+                  type="password"
+                  placeholder="**********"
+                  value={this.state.password}
+                  name="password"
+                  onChange={e => this.handldeChange(e)}
+                />
               </div>
               <Button name="Sign in" />
             </form>
@@ -69,11 +139,22 @@ class Login extends Component {
   }
 }
 
-Login.propTypes = {
-  classes: PropTypes.object.isRequired,
+const mapStateToProps = state => {
+  return {
+    state: state,
+  }
 }
 
-export default Login
+const mapDispatchToProps = dispatch => {
+  return {
+    initializeGroup: group => dispatch(initialize_group(group)),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Login)
 
 const FormWrapper = styled.div`
   height: 100%;

@@ -1,4 +1,9 @@
-import { INIT_GROUP_PROJECTS, INIT_GROUP } from '../actions'
+import {
+  INIT_GROUP_PROJECTS,
+  INIT_GROUP,
+  ADD_PROJECT_STORE,
+  ADD_TEST_SUITE_STORE,
+} from '../actions'
 let initialState = {}
 
 const Reducer = (state = initialState, action) => {
@@ -7,6 +12,10 @@ const Reducer = (state = initialState, action) => {
       return Object.assign({}, state, { group: action.group })
     case INIT_GROUP_PROJECTS:
       return Object.assign({}, state, { groupProjects: action.projects })
+    case ADD_PROJECT_STORE:
+      return Object.assign({}, state, { project: action.project })
+    case ADD_TEST_SUITE_STORE:
+      return Object.assign({}, state, { testsuite: action.testsuite })
     default:
       return state
   }

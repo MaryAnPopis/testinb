@@ -1,28 +1,41 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
+
 import MenuBar from '../components/MenuBar'
-import Input from '../components/Input'
-import Label from '../components/Label'
-import Button from '../components/Button'
+import Loader from '../components/Loader'
+import { colors } from '../styles/colors'
+import { getByParam } from '../services'
 
 export class Project extends Component {
+  constructor(props) {
+    super(props)
+    const projectId = props.match.params.idProject
+    this.state = {
+      projectId: projectId,
+      fetchInProgress: false,
+      projectName: '',
+      creationDate: '',
+    }
+  }
+
+  componentDidMount() {
+    this.setState({
+      fetchInProgress: true,
+    })
+    getByParam('project', this.state.projectId).then(data => {
+      this.setState({
+        fetchInProgress: false,
+        projectName: data[0].name,
+        creationDate: data[0].creation_date,
+      })
+    })
+  }
   render() {
     return (
       <div>
+        {this.state.fetchInProgress && <Loader color={colors.black} />}
         <MenuBar />
         <div className="container">
-          <FormWrapper>
-            <form className="form">
-              <div className="form__header">
-                <h2 className="form__title">Create a project</h2>
-              </div>
-              <div className="form-control">
-                <Label name="Project name" />
-                <Input type="text" placeholder="Jira" />
-              </div>
-              <Button name="Create" />
-            </form>
-          </FormWrapper>
+          <h1>Project {this.state.projectName}</h1>
         </div>
       </div>
     )
@@ -30,10 +43,3 @@ export class Project extends Component {
 }
 
 export default Project
-
-const FormWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  height: 100vh;
-  align-items: center;
-`

@@ -36,6 +36,14 @@ export const GlobalStyles = createGlobalStyle`
     font-weight: 400;
   }
 
+  .mb-1{
+    margin-bottom: 1rem;
+  }
+
+  .margin-0{
+    margin: 0;
+  }
+
   .form {
     background-color: white;
     border: solid 1px ${colors.grey};
