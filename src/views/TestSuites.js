@@ -22,10 +22,10 @@ export class TestSuites extends Component {
     }
   }
   componentDidMount() {
-    this.setState({
-      fetchInProgress: true,
-    })
     getByParam('testsuite/project', this.state.idProject).then(data => {
+      this.setState({
+        fetchInProgress: true,
+      })
       this.props.setTestsSuites(data)
       this.setState({
         testsuites: this.props.testsuitelist,
@@ -42,7 +42,7 @@ export class TestSuites extends Component {
           <h1>Project {this.state.projectTitle}</h1>
           <Add path={`/add/testsuite`} />
           <h3>Test Suites</h3>
-          {this.state.testsuites.map(suite => {
+          {this.props.testsuitelist.map(suite => {
             return suite.isActive ? (
               <WideCard
                 key={suite.id}
