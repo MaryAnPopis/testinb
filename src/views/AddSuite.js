@@ -21,6 +21,7 @@ export class AddSuite extends Component {
       creation_date: getCurrentDate(),
       groupId: groupId,
       projectId: projectId,
+      isActive: true,
       fetchInProgress: false,
       redirect: false,
     }
@@ -43,6 +44,7 @@ export class AddSuite extends Component {
       creationDate: this.state.creation_date,
       idGroup: this.state.groupId,
       idProject: this.state.projectId,
+      isActive: this.state.isActive,
     }
 
     post('testSuite', testsuite)
