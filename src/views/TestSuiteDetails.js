@@ -40,8 +40,9 @@ class TestSuiteDetails extends Component {
     })
     getByParam('testcase/testsuite', idTestSuite)
       .then(data => {
+        console.log('mount test cases list', this.props.testcaseslist)
+        data = data.filter(item => item.isActive === 1)
         this.props.setTestCases(data)
-
         this.setState({
           testcases: data,
           fetchInProgress: false,

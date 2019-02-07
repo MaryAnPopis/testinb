@@ -8,7 +8,7 @@ import { post, getByParam } from '../services'
 import Input from '../components/Input'
 import Label from '../components/Label'
 import Button from '../components/Button'
-import { initialize_group } from '../actions'
+import { initialize_group, init_state } from '../actions'
 import Loader from '../components/Loader'
 import { colors } from '../styles/colors'
 class Login extends Component {
@@ -42,11 +42,13 @@ class Login extends Component {
           this.setState({
             fetchInProgress: true,
           })
+
           getByParam('user', data.id).then(data => {
             const idGroup = {
               idGroup: data[0].idGroup,
             }
             this.props.initializeGroup(idGroup)
+            this.props.initState({ testsuiteslist: [], testcaseslist: [] })
             this.setState({
               redirect: true,
             })
@@ -148,6 +150,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     initializeGroup: group => dispatch(initialize_group(group)),
+    initState: state => dispatch(init_state(state)),
   }
 }
 

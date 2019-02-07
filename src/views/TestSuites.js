@@ -22,17 +22,23 @@ export class TestSuites extends Component {
     }
   }
   componentDidMount() {
-    getByParam('testsuite/project', this.state.idProject).then(data => {
-      this.setState({
-        fetchInProgress: true,
-      })
-      this.props.setTestsSuites(data)
-      this.setState({
-        testsuites: this.props.testsuitelist,
-        fetchInProgress: false,
-      })
+    this.setState({
+      fetchInProgress: true,
     })
+    getByParam('testsuite/project', this.state.idProject)
+      .then(data => {
+        console.log('test suite list')
+        this.props.setTestsSuites(data)
+        this.setState({
+          testsuites: this.props.testsuiteslist,
+          fetchInProgress: false,
+        })
+      })
+      .catch(err => {
+        throw err
+      })
   }
+
   render() {
     return (
       <div>
@@ -42,7 +48,7 @@ export class TestSuites extends Component {
           <h1>Project {this.state.projectTitle}</h1>
           <Add path={`/add/testsuite`} />
           <h3>Test Suites</h3>
-          {this.props.testsuitelist.map(suite => {
+          {this.props.testsuiteslist.map(suite => {
             return suite.isActive ? (
               <WideCard
                 key={suite.id}
@@ -82,7 +88,7 @@ export class TestSuites extends Component {
 const mapStateToProps = state => {
   return {
     project: state.project,
-    testsuitelist: state.testsuiteslist,
+    testsuiteslist: state.testsuiteslist,
   }
 }
 
@@ -90,7 +96,7 @@ const mapDispatchToProps = dispatch => {
   return {
     onDelete: item => dispatch(deleteItem(item)),
     setTestSuite: testSuite => dispatch(add_test_suite_store(testSuite)),
-    setTestsSuites: testSuiteList => dispatch(add_tests_suites_project(testSuiteList)),
+    setTestsSuites: testsuites => dispatch(add_tests_suites_project(testsuites)),
   }
 }
 

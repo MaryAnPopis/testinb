@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom'
 import Dropzone from 'react-dropzone'
 import { connect } from 'react-redux'
 
-import { initialize_group } from '../actions'
+import { initialize_group, init_state } from '../actions'
 import Input from '../components/Input'
 import Label from '../components/Label'
 import Button from '../components/Button'
@@ -92,6 +92,7 @@ class Signup extends Component {
             }
             patch(`user/${this.state.idOwner}`, idGroup)
             this.props.initializeGroup(idGroup)
+            this.props.initState({ testsuiteslist: [], testcaseslist: [] })
             this.setState({
               idGroup: data.insertId,
               redirect: true,
@@ -337,6 +338,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     initializeGroup: group => dispatch(initialize_group(group)),
+    initState: state => dispatch(init_state(state)),
   }
 }
 

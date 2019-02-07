@@ -11,7 +11,7 @@ import {
 
 import { patch, deleteItemStore } from '../services'
 
-let initialState = {}
+let initialState = { testsuiteslist: [], testcaseslist: [] }
 
 const Reducer = (state = initialState, action) => {
   switch (action.type) {

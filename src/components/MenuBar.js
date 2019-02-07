@@ -1,7 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
+import { connect } from 'react-redux'
 
+import { log_out } from '../actions'
 import { colors } from '../styles/colors'
 
 const hide = {
@@ -12,6 +14,7 @@ class MenuBar extends React.Component {
   logOut() {
     sessionStorage.setItem('user', JSON.stringify({ isLogged: false }))
     localStorage.clear()
+    this.props.log_out({ testsuiteslist: [], testcaseslist: [] })
   }
   render() {
     return (
@@ -68,8 +71,21 @@ class MenuBar extends React.Component {
     )
   }
 }
+const mapStateToProps = state => {
+  return {
+    state,
+  }
+}
 
-export default MenuBar
+const mapDispatchToProps = dispatch => {
+  return {
+    logOut: stateClean => dispatch(log_out(stateClean)),
+  }
+}
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MenuBar)
 
 const NavBar = styled.nav`
   background-color: ${colors.dark};

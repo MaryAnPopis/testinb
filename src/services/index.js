@@ -1,4 +1,4 @@
-const API_URL = 'http://testinb-api.us-west-2.elasticbeanstalk.com/api/v1'
+export const API_URL = 'http://testinb-api.us-west-2.elasticbeanstalk.com/api/v1'
 //const API_URL = 'http://localhost:5000/api/v1'
 
 export const getCurrentDate = () => {
@@ -22,7 +22,7 @@ export const deleteItemStore = (list, itemId, currentState) => {
   let index = list.indexOf(deleteItem)
   let newList = currentState
   newList.splice(index, 1)
-
+  newList = newList.filter(item => item.isActive === 1)
   return newList
 }
 

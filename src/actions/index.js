@@ -6,11 +6,25 @@ export const ADD_TESTS_SUITES_PROJECT = 'ADD_TESTS_SUITES_PROJECT'
 export const DELETE_TEST_CASE = 'DELETE_TEST_CASE'
 export const DELETE_TEST_SUITE = 'DELETE_TEST_SUITE'
 export const ADD_TESTS_CASES_STORE = 'ADD_TESTS_CASES_STORE'
+export const USER_LOG_OUT = 'USER_LOG_OUT'
+export const INIT_STATE = 'INIT_STATE'
 
 export const initialize_group_projects = projects => {
   return {
     type: INIT_GROUP_PROJECTS,
     projects,
+  }
+}
+export const log_out = state => {
+  return {
+    USER_LOG_OUT: USER_LOG_OUT,
+    state,
+  }
+}
+export const init_state = state => {
+  return {
+    type: INIT_STATE,
+    state,
   }
 }
 
