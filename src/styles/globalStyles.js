@@ -25,7 +25,18 @@ export const GlobalStyles = createGlobalStyle`
   }
 
   .hidden{
-    display: "none"
+    display: none
+  }
+
+  .dz-max-files-reached {
+    pointer-events: none;
+    cursor: default;
+  }
+  .reject {
+    border-color: #e74c3c;
+  }
+  .show{
+    display:block;
   }
 
   .bg-dark {
@@ -36,8 +47,18 @@ export const GlobalStyles = createGlobalStyle`
     font-weight: 400;
   }
 
+  input:disabled, textarea:disabled{
+    background-color: white;
+  }
+
+
+
   .mb-1{
     margin-bottom: 1rem;
+  }
+
+  .fontAqua {
+    color: ${colors.mainColorHover}
   }
 
   .margin-0{

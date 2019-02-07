@@ -4,7 +4,11 @@ import styled from 'styled-components'
 import { colors } from '../styles/colors'
 
 const Button = props => {
-  return <Style.Button onClick={props.onClick}>{props.name}</Style.Button>
+  return (
+    <Style.Button onClick={props.onClick} style={props.style}>
+      {props.name}
+    </Style.Button>
+  )
 }
 
 export default Button

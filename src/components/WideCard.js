@@ -3,94 +3,61 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { colors } from '../styles/colors'
+import Modal from './Modal'
+import eyeIcon from '../img/eye-19.svg'
+import trashIcon from '../img/trash-simple.svg'
 
-const WideCard = props => {
-  return (
-    <Card>
-      <ButtonIcon>
-        <Trash>
-          <Icon xmlns="http://www.w3.org/2000/svg" width="58" height="62" viewBox="0 0 58 62">
-            <g id="trash-simple" transform="translate(-3 -1)">
-              <path
-                id="Path_1"
-                data-name="Path 1"
-                d="M54,18V58a4,4,0,0,1-4,4H14a4,4,0,0,1-4-4V18"
-                fill="none"
-                stroke="gray"
-                strokeLinecap="square"
-                strokeMiterlimit="10"
-                strokeWidth="2"
-              />
-              <line
-                id="Line_1"
-                data-name="Line 1"
-                y2="22"
-                transform="translate(32 27)"
-                fill="none"
-                stroke="gray"
-                strokeLinecap="square"
-                strokeMiterlimit="10"
-                strokeWidth="2"
-              />
-              <line
-                id="Line_2"
-                data-name="Line 2"
-                y2="22"
-                transform="translate(22 27)"
-                fill="none"
-                stroke="gray"
-                strokeLinecap="square"
-                strokeMiterlimit="10"
-                strokeWidth="2"
-              />
-              <line
-                id="Line_3"
-                data-name="Line 3"
-                y2="22"
-                transform="translate(42 27)"
-                fill="none"
-                stroke="gray"
-                strokeLinecap="square"
-                strokeMiterlimit="10"
-                strokeWidth="2"
-              />
-              <path
-                id="Path_2"
-                data-name="Path 2"
-                d="M22,12V2H42V12"
-                fill="none"
-                stroke="gray"
-                strokeLinecap="square"
-                strokeMiterlimit="10"
-                strokeWidth="2"
-              />
-              <line
-                id="Line_4"
-                data-name="Line 4"
-                x1="56"
-                transform="translate(4 12)"
-                fill="none"
-                stroke="gray"
-                strokeLinecap="square"
-                strokeMiterlimit="10"
-                strokeWidth="2"
-              />
-            </g>
-          </Icon>
-        </Trash>
-      </ButtonIcon>
-      <TextWrapper>
-        <Title
-          to={`${props.route}/${props.id}`}
-          className="margin-0"
-          onClick={e => props.setTestSuite(e)}
-        >
-          {props.title}
-        </Title>
-        <SubTitle className="margin-0">Created on: {props.creationDate}</SubTitle>
-      </TextWrapper>
-    </Card>
-  )
+class WideCard extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.state = { show: false }
+  }
+
+  showModal() {
+    this.setState({ show: true })
+  }
+
+  hideModal() {
+    this.setState({ show: false })
+  }
+
+  render() {
+    return (
+      <div>
+        <Modal
+          show={this.state.show}
+          id={this.props.idItem}
+          handleClose={this.hideModal.bind(this)}
+        />
+        <Card>
+          <ButtonIcon onClick={e => this.props.onDelete(e)}>
+            <Trash>
+              <img src={trashIcon} alt="" />
+            </Trash>
+          </ButtonIcon>
+          <ButtonIcon
+            onClick={this.showModal.bind(this)}
+            className={this.props.showEye ? 'show' : 'hidden'}
+          >
+            <img src={eyeIcon} alt="view more" />
+          </ButtonIcon>
+          <TextWrapper>
+            <Title
+              to={`${this.props.route}/${this.props.id}`}
+              className="margin-0"
+              onClick={e => {
+                this.props.setTestSuite(e)
+              }}
+            >
+              {this.props.title}
+            </Title>
+            <SubTitle className="margin-0">Created on: {this.props.creationDate}</SubTitle>
+          </TextWrapper>
+        </Card>
+      </div>
+    )
+  }
 }
 
 export default WideCard
@@ -99,7 +66,7 @@ const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  margin-left: 2rem;
+  margin-left: 1rem;
 `
 
 const Card = styled.div`
@@ -126,10 +93,6 @@ const Trash = styled.div`
   height: 3rem;
   padding: 0;
   margin: 0;
-`
-const Icon = styled.svg`
-  width: 100%;
-  height: auto;
 `
 
 const ButtonIcon = styled.button`

@@ -36,8 +36,8 @@ const AddLink = styled(Link)`
   border-radius: 5px;
   border: 2px solid ${colors.bg};
   color: ${colors.bg};
-  width: 3rem;
-  padding: 0.9rem;
+  width: 2rem;
+  padding: 0.5rem;
 `
 
 const AddContainer = styled.div`
@@ -51,5 +51,5 @@ const AddContainer = styled.div`
   background-color: #f2f1f0;
   width: 100%;
   height: auto;
-  padding: 1rem;
+  padding: 0.5rem;
 `

@@ -7,6 +7,8 @@ import Add from '../components/Add'
 import { getByParam } from '../services'
 import WideCard from '../components/WideCard'
 import { colors } from '../styles/colors'
+import Loader from '../components/Loader'
+
 import * as moment from 'moment-mini'
 
 const getDay = date => {
@@ -28,20 +30,25 @@ export class TestSuiteDetails extends Component {
     super()
     this.state = {
       testcases: [],
+      fetchInProgress: false,
     }
   }
   componentDidMount() {
     const idTestSuite = this.props.testsuite.id
+    this.setState({
+      fetchInProgress: true,
+    })
     getByParam('testcase/testsuite', idTestSuite).then(data => {
       this.setState({
         testcases: data,
+        fetchInProgress: false,
       })
-      console.log(data)
     })
   }
   render() {
     return (
       <div>
+        {this.state.fetchInProgress && <Loader color={colors.black} />}
         <MenuBar />
         <div className="container">
           <h1>{this.props.testsuite.title}</h1>
@@ -79,14 +86,17 @@ export class TestSuiteDetails extends Component {
             </StatItem>
           </Stats>
           <Add path={`/project/testsuite/details/${this.props.testsuite.id}/addtestcase`} />
-          {this.state.testcases.map(suite => {
+          <h3>Test Cases</h3>
+          {this.state.testcases.map(item => {
             return (
               <WideCard
-                key={suite.id}
-                title={suite.title}
-                creationDate={suite.creation_date}
-                route="testsuite/details"
-                id={suite.id}
+                key={item.id}
+                title={item.title}
+                creationDate={item.creation_date}
+                route=""
+                id={item.id}
+                idItem={item.id}
+                showEye={true}
               />
             )
           })}
@@ -147,7 +157,7 @@ Style.RightPane = styled.div`
 `
 
 Style.Mark = styled.span`
-  font-size: 3.6rem;
+  font-size: 3rem;
   font-weight: 600;
   color: ${colors.aqua};
 `

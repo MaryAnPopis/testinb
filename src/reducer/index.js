@@ -3,7 +3,12 @@ import {
   INIT_GROUP,
   ADD_PROJECT_STORE,
   ADD_TEST_SUITE_STORE,
+  ADD_TESTS_SUITES_PROJECT,
+  DELETE_ITEM,
 } from '../actions'
+
+import { patch } from '../services'
+
 let initialState = {}
 
 const Reducer = (state = initialState, action) => {
@@ -16,6 +21,18 @@ const Reducer = (state = initialState, action) => {
       return Object.assign({}, state, { project: action.project })
     case ADD_TEST_SUITE_STORE:
       return Object.assign({}, state, { testsuite: action.testsuite })
+    case ADD_TESTS_SUITES_PROJECT:
+      return Object.assign({}, state, { testsuiteslist: action.testsuites })
+    case DELETE_ITEM:
+      let deleteItem = state.testsuiteslist.find(item => item.id === action.item.id)
+      let index = state.testsuiteslist.indexOf(deleteItem)
+      let newList = [...state.testsuiteslist]
+      newList.splice(index, 1)
+      const Item = {
+        isActive: false,
+      }
+      patch(`testSuite/${action.item.id}`, Item)
+      return Object.assign({}, state, { testsuiteslist: newList })
     default:
       return state
   }

@@ -101,7 +101,7 @@ export class AddTestCase extends Component {
     return (
       <div>
         {this.state.redirect ? (
-          <Redirect to={`/project/testsuites`} />
+          <Redirect to={`/project/testsuite/details/${this.props.testsuite.id}`} />
         ) : (
           this.state.fetchInProgress && <Loader color={colors.black} />
         )}
