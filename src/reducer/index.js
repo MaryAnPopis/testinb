@@ -4,10 +4,12 @@ import {
   ADD_PROJECT_STORE,
   ADD_TEST_SUITE_STORE,
   ADD_TESTS_SUITES_PROJECT,
-  DELETE_ITEM,
+  DELETE_TEST_SUITE,
+  ADD_TESTS_CASES_STORE,
+  DELETE_TEST_CASE,
 } from '../actions'
 
-import { patch } from '../services'
+import { patch, deleteItemStore } from '../services'
 
 let initialState = {}
 
@@ -21,18 +23,24 @@ const Reducer = (state = initialState, action) => {
       return Object.assign({}, state, { project: action.project })
     case ADD_TEST_SUITE_STORE:
       return Object.assign({}, state, { testsuite: action.testsuite })
+    case ADD_TESTS_CASES_STORE:
+      return Object.assign({}, state, { testcaseslist: action.testcases })
     case ADD_TESTS_SUITES_PROJECT:
       return Object.assign({}, state, { testsuiteslist: action.testsuites })
-    case DELETE_ITEM:
-      let deleteItem = state.testsuiteslist.find(item => item.id === action.item.id)
-      let index = state.testsuiteslist.indexOf(deleteItem)
-      let newList = [...state.testsuiteslist]
-      newList.splice(index, 1)
+    case DELETE_TEST_SUITE:
+      let newList = deleteItemStore(state.testsuiteslist, action.item.id, [...state.testsuiteslist])
       const Item = {
         isActive: false,
       }
-      patch(`testSuite/${action.item.id}`, Item)
+      patch(`${action.item.path}/${action.item.id}`, Item)
       return Object.assign({}, state, { testsuiteslist: newList })
+    case DELETE_TEST_CASE:
+      newList = deleteItemStore(state.testcaseslist, action.item.id, [...state.testcaseslist])
+      const testCase = {
+        isActive: false,
+      }
+      patch(`${action.item.path}/${action.item.id}`, testCase)
+      return Object.assign({}, state, { testcaseslist: newList })
     default:
       return state
   }

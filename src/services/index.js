@@ -17,6 +17,15 @@ export const getCurrentDate = () => {
   return today
 }
 
+export const deleteItemStore = (list, itemId, currentState) => {
+  let deleteItem = list.find(item => item.id === itemId)
+  let index = list.indexOf(deleteItem)
+  let newList = currentState
+  newList.splice(index, 1)
+
+  return newList
+}
+
 export const saveState = state => {
   try {
     const serializedState = JSON.stringify(state)

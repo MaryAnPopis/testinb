@@ -64,6 +64,8 @@ export class TestSuites extends Component {
                     creationDate: suite.creation_date,
                     id: suite.id,
                     idProject: suite.idProject,
+                    path: 'testsuite',
+                    list: 'testsuiteslist',
                   })
                 }
               />

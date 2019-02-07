@@ -8,7 +8,7 @@ import { getByParam } from '../services'
 import WideCard from '../components/WideCard'
 import { colors } from '../styles/colors'
 import Loader from '../components/Loader'
-
+import { deleteTestCase, add_tests_cases_store } from '../actions'
 import * as moment from 'moment-mini'
 
 const getDay = date => {
@@ -25,7 +25,7 @@ const getYear = date => {
   return moment(formatted).format('Y')
 }
 
-export class TestSuiteDetails extends Component {
+class TestSuiteDetails extends Component {
   constructor() {
     super()
     this.state = {
@@ -38,12 +38,18 @@ export class TestSuiteDetails extends Component {
     this.setState({
       fetchInProgress: true,
     })
-    getByParam('testcase/testsuite', idTestSuite).then(data => {
-      this.setState({
-        testcases: data,
-        fetchInProgress: false,
+    getByParam('testcase/testsuite', idTestSuite)
+      .then(data => {
+        this.props.setTestCases(data)
+
+        this.setState({
+          testcases: data,
+          fetchInProgress: false,
+        })
       })
-    })
+      .catch(err => {
+        throw err
+      })
   }
   render() {
     return (
@@ -87,8 +93,8 @@ export class TestSuiteDetails extends Component {
           </Stats>
           <Add path={`/project/testsuite/details/${this.props.testsuite.id}/addtestcase`} />
           <h3>Test Cases</h3>
-          {this.state.testcases.map(item => {
-            return (
+          {this.props.testcaseslist.map(item => {
+            return item.isActive ? (
               <WideCard
                 key={item.id}
                 title={item.title}
@@ -97,7 +103,18 @@ export class TestSuiteDetails extends Component {
                 id={item.id}
                 idItem={item.id}
                 showEye={true}
+                onDelete={() =>
+                  this.props.onDelete({
+                    title: item.title,
+                    creationDate: item.creation_date,
+                    id: item.id,
+                    description: item.description,
+                    path: 'testcase',
+                  })
+                }
               />
+            ) : (
+              ''
             )
           })}
         </div>
@@ -110,12 +127,20 @@ const mapStateToProps = state => {
   return {
     testsuite: state.testsuite,
     project: state.project,
+    testcaseslist: state.testcaseslist,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onDelete: item => dispatch(deleteTestCase(item)),
+    setTestCases: testcases => dispatch(add_tests_cases_store(testcases)),
   }
 }
 
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(TestSuiteDetails)
 
 const StatItem = styled.div`
