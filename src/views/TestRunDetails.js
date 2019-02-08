@@ -10,21 +10,18 @@ import { colors } from '../styles/colors'
 import { Link } from 'react-router-dom'
 import { getByParam } from '../services'
 
-const data = {
-  labels: ['Passed', 'Failed', 'Skipped'],
-  datasets: [
-    {
-      data: [300, 50, 100],
-      backgroundColor: ['#3498db', '#e74c3c', '#FFCE56'],
-      hoverBackgroundColor: ['#2980b9', '#c0392b', '#FFCE56'],
-    },
-  ],
+const filter = (arr, result) => {
+  let filteredArr = arr.filter(testCase => testCase.result === result)
+  return filteredArr
 }
-
 export class TestRunDetails extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      passed: 0,
+      failed: 0,
+      skipped: 0,
+      graphData: {},
       idTestRun: this.props.match.params.idTestRun,
       indexCase: 0,
       testRun: {},
@@ -43,6 +40,7 @@ export class TestRunDetails extends Component {
           totalCasesForRun: testCasesData.length,
         })
 
+        // Validate that the test run have test cases to run
         if (this.state.totalCasesForRun <= 0) {
           this.setState({
             preventRedirect: true,
@@ -52,6 +50,33 @@ export class TestRunDetails extends Component {
             autoClose: 5000,
           })
         }
+        // Validate that the test run have test cases to run
+
+        // Get test cases by test run
+        getByParam('testrun/run', this.state.idTestRun).then(data => {
+          const passed = filter(data, 'passed')
+          const failed = filter(data, 'failed')
+          const skipped = filter(data, 'skipped')
+          this.setState({
+            passed: passed.length,
+            failed: failed.length,
+            skipped: skipped.length,
+          })
+          // graph props
+          const graph = {
+            labels: ['Passed', 'Failed', 'Skipped'],
+            datasets: [
+              {
+                data: [this.state.passed, this.state.failed, this.state.skipped],
+                backgroundColor: ['#3498db', '#e74c3c', '#FFCE56'],
+                hoverBackgroundColor: ['#2980b9', '#c0392b', '#FFCE56'],
+              },
+            ],
+          }
+          this.setState({
+            graphData: graph,
+          })
+        })
       })
     })
   }
@@ -76,25 +101,25 @@ export class TestRunDetails extends Component {
           </BtnWrapper>
           <Stats>
             <GraphContainer>
-              <Doughnut data={data} />
+              <Doughnut data={this.state.graphData} />
             </GraphContainer>
             <GraphContainer>
               <StatItem>
-                <StatData>0</StatData>
+                <StatData>{this.state.passed}</StatData>
                 <div>
                   <StatTitle>Passed</StatTitle>
                   <StatSubTitle>Test cases have passed</StatSubTitle>
                 </div>
               </StatItem>
               <StatItem>
-                <StatData>0</StatData>
+                <StatData>{this.state.failed}</StatData>
                 <div>
                   <StatTitle>Failed</StatTitle>
                   <StatSubTitle>Test cases have failed</StatSubTitle>
                 </div>
               </StatItem>
               <StatItem>
-                <StatData>0</StatData>
+                <StatData>{this.state.skipped}</StatData>
                 <div>
                   <StatTitle>Skipped</StatTitle>
                   <StatSubTitle>Test cases have been skipped</StatSubTitle>

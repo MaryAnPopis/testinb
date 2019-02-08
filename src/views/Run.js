@@ -59,7 +59,6 @@ export class Run extends Component {
         idTestRun: this.state.idTestRun,
         result: result,
       }
-      console.log(run)
       post('testrun/run', run)
 
       if (leftIndexCase + 1 > totalCasesForRun) {
