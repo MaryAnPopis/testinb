@@ -10,6 +10,7 @@ import {
   ADD_TESTS_RUNS_TO_STORE,
   CURRENT_RUN_CASE,
   INDEX_CASE,
+  ADD_TEST_RUN,
 } from '../actions'
 
 import { patch, deleteItemStore, EMPTY_STATE } from '../services'
@@ -30,6 +31,9 @@ const Reducer = (state = initialState, action) => {
       return Object.assign({}, state, { currentRunCase: action.testcase })
     case ADD_TEST_SUITE_STORE:
       return Object.assign({}, state, { testsuite: action.testsuite })
+    case ADD_TEST_RUN:
+      console.log('reducer')
+      return Object.assign({}, state, { testrun: action.testrun })
     case ADD_TESTS_CASES_STORE:
       return Object.assign({}, state, { testcaseslist: action.testcases })
     case ADD_TESTS_SUITES_PROJECT:

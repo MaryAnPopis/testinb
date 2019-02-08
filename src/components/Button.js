@@ -5,7 +5,7 @@ import { colors } from '../styles/colors'
 
 const Button = props => {
   return (
-    <Style.Button onClick={props.onClick} style={props.style}>
+    <Style.Button id={props.id} onClick={props.onClick} style={props.style}>
       {props.name}
     </Style.Button>
   )

@@ -5,7 +5,7 @@ import { colors } from '../styles/colors'
 
 function ProjectCard(props) {
   return (
-    <Card to={`project/details/${props.id}`} onClick={e => props.onProjectClick(e)}>
+    <Card to={`project/testsuites`} onClick={e => props.onProjectClick(e)}>
       <h2>{props.title}</h2>
       <SubTitle>Creation date : {props.date}</SubTitle>
     </Card>

@@ -36,7 +36,7 @@ class TestSuiteDetails extends Component {
   componentDidMount() {
     const idTestSuite = this.props.testsuite.id
     this.setState({
-      fetchInProgress: true,
+      fetchInProgress: false,
     })
     getByParam('testcase/testsuite', idTestSuite)
       .then(data => {

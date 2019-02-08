@@ -12,6 +12,7 @@ export const INIT_STATE = 'INIT_STATE'
 export const RUN = 'RUN'
 export const CURRENT_RUN_CASE = 'CURRENT_RUN_CASE'
 export const INDEX_CASE = 'INDEX_CASE'
+export const ADD_TEST_RUN = 'ADD_TEST_RUN'
 
 export const current_run_case = testcase => {
   return {
@@ -75,6 +76,12 @@ export const add_test_suite_store = testsuite => {
   return {
     type: ADD_TEST_SUITE_STORE,
     testsuite,
+  }
+}
+export const add_test_run_store = testrun => {
+  return {
+    type: ADD_TEST_RUN,
+    testrun,
   }
 }
 export const add_test_runs_to_store = testruns => {

@@ -5,6 +5,7 @@ export const EMPTY_STATE = {
   testrunslist: [],
   currentRunCase: {},
   setIndexCase: 0,
+  testrun: {},
 }
 //const API_URL = 'http://localhost:5000/api/v1'
 

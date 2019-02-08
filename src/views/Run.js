@@ -9,12 +9,13 @@ import Button from '../components/Button'
 import { colors } from '../styles/colors'
 
 export class Run extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
+    const idRun = this.props.match.params.idTestRun
     this.state = {
       indexCase: 0,
       idTestSuite: 0,
-      idTestRun: 0,
+      idTestRun: idRun,
       id: 0,
       attachment: '',
       creation_date: '',
@@ -23,15 +24,41 @@ export class Run extends Component {
       isActive: 1,
       steps: '',
       title: '',
+      totalCasesToRun: 0,
+      testRun: {},
     }
   }
   componentDidMount() {
-    const idTestSuite = this.props.testsuite.id
-    getByParam('testcase/testsuite', idTestSuite).then(data => {
-      console.log(data)
-      this.props.setIndexCase(this.state.indexCase)
-      this.props.setCurrentCase(data[this.props.indexCase])
+    getByParam('testrun', this.state.idTestRun).then(testRunData => {
+      const idTestSuite = testRunData[0].idTestSuite
+      this.setState({
+        idTestSuite: testRunData[0].idTestSuite,
+        testRun: testRunData[0],
+      })
+      getByParam('testcase/testsuite', idTestSuite).then(data => {
+        this.props.setIndexCase(this.state.indexCase)
+        this.props.setCurrentCase(data[this.props.indexCase])
+        this.setState({
+          totalCasesToRun: data.length,
+        })
+      })
     })
+  }
+
+  onResultCase(e) {
+    const leftIndexCase = this.props.indexCase + 1
+    const totalCasesForRun = this.state.totalCasesToRun
+
+    if (leftIndexCase + 1 > totalCasesForRun) {
+      this.props.history.goBack()
+    } else {
+      const idTestSuite = this.state.idTestSuite
+      getByParam('testcase/testsuite', idTestSuite).then(data => {
+        this.props.setIndexCase(leftIndexCase)
+        this.props.setCurrentCase(data[this.props.indexCase])
+      })
+    }
+    console.log(e.target.id)
   }
 
   render() {
@@ -39,7 +66,7 @@ export class Run extends Component {
       <div>
         <MenuBar />
         <div className="container">
-          <h1>Run : {this.props.testsuite.title}</h1>
+          <h1>Run : {this.state.testRun.name}</h1>
           <Paper className="form">
             <div>
               <h2>
@@ -74,13 +101,13 @@ export class Run extends Component {
               </div>
               <BtnWrapper>
                 <Btn>
-                  <Button name="Passed" />
+                  <Button id="passed" name="Pass" onClick={e => this.onResultCase(e)} />
                 </Btn>
                 <Btn>
-                  <Button name="Failed" />
+                  <Button id="failed" name="Fail" onClick={e => this.onResultCase(e)} />
                 </Btn>
                 <Btn>
-                  <Button name="Skipped" />
+                  <Button id="skipped" name="Skip" onClick={e => this.onResultCase(e)} />
                 </Btn>
               </BtnWrapper>
             </div>
@@ -93,7 +120,6 @@ export class Run extends Component {
 
 const mapStateToProps = state => {
   return {
-    testsuite: state.testsuite,
     currentRunCase: state.currentRunCase,
     indexCase: state.indexCase,
   }

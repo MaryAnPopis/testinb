@@ -6,8 +6,8 @@ import { connect } from 'react-redux'
 import MenuBar from '../components/MenuBar'
 import { colors } from '../styles/colors'
 import { Link } from 'react-router-dom'
+import { getByParam } from '../services'
 
-import { current_run_case, index_case } from '../actions'
 const data = {
   labels: ['Passed', 'Failed', 'Skipped'],
   datasets: [
@@ -25,7 +25,16 @@ export class TestRunDetails extends Component {
     this.state = {
       idTestRun: this.props.match.params.idTestRun,
       indexCase: 0,
+      testRun: {},
     }
+  }
+
+  componentDidMount() {
+    getByParam('testrun', this.state.idTestRun).then(testRunData => {
+      this.setState({
+        testRun: testRunData[0],
+      })
+    })
   }
 
   render() {
@@ -33,7 +42,7 @@ export class TestRunDetails extends Component {
       <div>
         <MenuBar />
         <div className="container">
-          <h1>Test Run : {this.props.testsuite.title}</h1>
+          <h1>Test Run : {this.state.testRun.name}</h1>
           <BtnWrapper>
             <Run to={`/testrun/${this.state.idTestRun}/run`}>Start Run</Run>
           </BtnWrapper>
@@ -73,17 +82,13 @@ export class TestRunDetails extends Component {
 
 const mapStateToProps = state => {
   return {
-    testsuite: state.testsuite,
+    testrun: state.testrun,
   }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {}
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(TestRunDetails)
 
 const StatData = styled.h2`

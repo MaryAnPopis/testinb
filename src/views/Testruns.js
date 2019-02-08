@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 
 import MenuBar from '../components/MenuBar'
 import Add from '../components/Add'
@@ -8,8 +7,7 @@ import WideCard from '../components/WideCard'
 import Loader from '../components/Loader'
 import { getByParam } from '../services'
 import { colors } from '../styles/colors'
-import { add_test_runs_to_store } from '../actions'
-import * as moment from 'moment-mini'
+import { add_test_runs_to_store, add_test_run_store } from '../actions'
 
 export class Testruns extends Component {
   constructor() {
@@ -47,6 +45,15 @@ export class Testruns extends Component {
           {this.props.testrunslist.map(item => {
             return (
               <WideCard
+                addCurrentTestRun={() =>
+                  this.props.addCurrentTestRun({
+                    name: item.name,
+                    creationDate: item.creation_date,
+                    id: item.id,
+                    idTestSuite: item.idTestSuite,
+                    idGroup: item.idGroup,
+                  })
+                }
                 key={item.id}
                 title={item.name}
                 creationDate={item.creation_date}
@@ -74,6 +81,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     setTestRuns: testcases => dispatch(add_test_runs_to_store(testcases)),
+    addCurrentTestRun: testrun => dispatch(add_test_run_store(testrun)),
   }
 }
 
