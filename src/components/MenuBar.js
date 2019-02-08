@@ -60,7 +60,7 @@ class MenuBar extends React.Component {
               <LinkNav to="/project/testsuites">Test Suites</LinkNav>
             </span>
             <span style={this.props.hidden && hide}>
-              <LinkNav to="/home">Test Runs</LinkNav>
+              <LinkNav to="/testruns">Test Runs</LinkNav>
             </span>
             <LinkNav to="/" onClick={this.logOut}>
               <strong>Log out</strong>

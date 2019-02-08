@@ -1,4 +1,11 @@
 export const API_URL = 'http://testinb-api.us-west-2.elasticbeanstalk.com/api/v1'
+export const EMPTY_STATE = {
+  testsuiteslist: [],
+  testcaseslist: [],
+  testrunslist: [],
+  currentRunCase: {},
+  setIndexCase: 0,
+}
 //const API_URL = 'http://localhost:5000/api/v1'
 
 export const getCurrentDate = () => {
@@ -38,6 +45,18 @@ export const saveState = state => {
 export const loadState = () => {
   try {
     const serializedState = localStorage.getItem('state')
+    if (serializedState === null) {
+      return undefined
+    }
+    return JSON.parse(serializedState)
+  } catch (err) {
+    return undefined
+  }
+}
+
+export const loadSession = () => {
+  try {
+    const serializedState = sessionStorage.getItem('user')
     if (serializedState === null) {
       return undefined
     }

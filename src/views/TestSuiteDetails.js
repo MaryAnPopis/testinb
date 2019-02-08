@@ -4,10 +4,10 @@ import styled from 'styled-components'
 
 import MenuBar from '../components/MenuBar'
 import Add from '../components/Add'
-import { getByParam } from '../services'
 import WideCard from '../components/WideCard'
-import { colors } from '../styles/colors'
 import Loader from '../components/Loader'
+import { getByParam } from '../services'
+import { colors } from '../styles/colors'
 import { deleteTestCase, add_tests_cases_store } from '../actions'
 import * as moment from 'moment-mini'
 
@@ -40,7 +40,6 @@ class TestSuiteDetails extends Component {
     })
     getByParam('testcase/testsuite', idTestSuite)
       .then(data => {
-        console.log('mount test cases list', this.props.testcaseslist)
         data = data.filter(item => item.isActive === 1)
         this.props.setTestCases(data)
         this.setState({
@@ -104,6 +103,7 @@ class TestSuiteDetails extends Component {
                 id={item.id}
                 idItem={item.id}
                 showEye={true}
+                showTrash={true}
                 onDelete={() =>
                   this.props.onDelete({
                     title: item.title,

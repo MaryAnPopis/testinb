@@ -32,7 +32,7 @@ class WideCard extends React.Component {
         />
         <Card>
           <ButtonIcon onClick={e => this.props.onDelete(e)}>
-            <Trash>
+            <Trash className={this.props.showTrash ? 'show' : 'hidden'}>
               <img src={trashIcon} alt="" />
             </Trash>
           </ButtonIcon>

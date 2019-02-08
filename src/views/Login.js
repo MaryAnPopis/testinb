@@ -4,7 +4,7 @@ import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { ToastContainer, toast } from 'react-toastify'
 
-import { post, getByParam } from '../services'
+import { post, getByParam, EMPTY_STATE } from '../services'
 import Input from '../components/Input'
 import Label from '../components/Label'
 import Button from '../components/Button'
@@ -48,12 +48,19 @@ class Login extends Component {
               idGroup: data[0].idGroup,
             }
             this.props.initializeGroup(idGroup)
-            this.props.initState({ testsuiteslist: [], testcaseslist: [] })
+            this.props.initState(EMPTY_STATE)
+
+            sessionStorage.setItem(
+              'user',
+              JSON.stringify({
+                isLogged: true,
+                user: { userId: data[0].id, userName: data[0].name },
+              })
+            )
             this.setState({
               redirect: true,
             })
           })
-          sessionStorage.setItem('user', JSON.stringify({ isLogged: true }))
         } else {
           toast.error('Username or password is invalid!', {
             position: 'bottom-right',

@@ -10,7 +10,7 @@ import Label from '../components/Label'
 import Button from '../components/Button'
 import Loader from '../components/Loader'
 import { colors } from '../styles/colors'
-import { upload, post, patch } from '../services'
+import { upload, post, patch, EMPTY_STATE } from '../services'
 
 class Signup extends Component {
   constructor(props) {
@@ -92,7 +92,7 @@ class Signup extends Component {
             }
             patch(`user/${this.state.idOwner}`, idGroup)
             this.props.initializeGroup(idGroup)
-            this.props.initState({ testsuiteslist: [], testcaseslist: [] })
+            this.props.initState(EMPTY_STATE)
             this.setState({
               idGroup: data.insertId,
               redirect: true,

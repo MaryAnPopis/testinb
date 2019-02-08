@@ -23,11 +23,10 @@ export class TestSuites extends Component {
   }
   componentDidMount() {
     this.setState({
-      fetchInProgress: true,
+      fetchInProgress: false,
     })
     getByParam('testsuite/project', this.state.idProject)
       .then(data => {
-        console.log('test suite list')
         this.props.setTestsSuites(data)
         this.setState({
           testsuites: this.props.testsuiteslist,
@@ -56,6 +55,7 @@ export class TestSuites extends Component {
                 creationDate={suite.creation_date}
                 route="testsuite/details"
                 id={suite.id}
+                showTrash={true}
                 setTestSuite={() =>
                   this.props.setTestSuite({
                     title: suite.title,

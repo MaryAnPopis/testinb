@@ -24,6 +24,7 @@ export const GlobalStyles = createGlobalStyle`
     font-weight: 600;
   }
 
+
   .hidden{
     display: none
   }

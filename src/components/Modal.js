@@ -50,18 +50,22 @@ class Modal extends Component {
   }
 
   componentDidMount() {
-    getByParam('testcase', this.state.idCase).then(data => {
-      this.setState({
-        attachment: data[0].attachment,
-        creation_date: data[0].creation_date,
-        description: data[0].description,
-        expected_result: data[0].expected_result,
-        id: data[0].id,
-        isActive: data[0].isActive,
-        steps: data[0].steps,
-        title: data[0].title,
+    getByParam('testcase', this.state.idCase)
+      .then(data => {
+        this.setState({
+          attachment: data[0].attachment,
+          creation_date: data[0].creation_date,
+          description: data[0].description,
+          expected_result: data[0].expected_result,
+          id: data[0].id,
+          isActive: data[0].isActive,
+          steps: data[0].steps,
+          title: data[0].title,
+        })
       })
-    })
+      .catch(err => {
+        console.error(err)
+      })
   }
 
   componentWillUnmount() {
