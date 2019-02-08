@@ -73,6 +73,7 @@ export class TestRunDetails extends Component {
               },
             ],
           }
+
           this.setState({
             graphData: graph,
           })
