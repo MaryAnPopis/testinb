@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import { Doughnut } from 'react-chartjs-2'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify'
 
 import MenuBar from '../components/MenuBar'
 import { colors } from '../styles/colors'
@@ -26,6 +28,8 @@ export class TestRunDetails extends Component {
       idTestRun: this.props.match.params.idTestRun,
       indexCase: 0,
       testRun: {},
+      totalCasesForRun: 0,
+      preventRedirect: false,
     }
   }
 
@@ -34,6 +38,21 @@ export class TestRunDetails extends Component {
       this.setState({
         testRun: testRunData[0],
       })
+      getByParam('testcase/testsuite', testRunData[0].idTestSuite).then(testCasesData => {
+        this.setState({
+          totalCasesForRun: testCasesData.length,
+        })
+
+        if (this.state.totalCasesForRun <= 0) {
+          this.setState({
+            preventRedirect: true,
+          })
+          toast.error(`This Test Suite doesn't have any Test Case yet!`, {
+            position: 'bottom-right',
+            autoClose: 5000,
+          })
+        }
+      })
     })
   }
 
@@ -41,10 +60,19 @@ export class TestRunDetails extends Component {
     return (
       <div>
         <MenuBar />
+        <ToastContainer />
         <div className="container">
           <h1>Test Run : {this.state.testRun.name}</h1>
           <BtnWrapper>
-            <Run to={`/testrun/${this.state.idTestRun}/run`}>Start Run</Run>
+            <Run
+              to={
+                this.state.preventRedirect === true
+                  ? this.props.location.pathname
+                  : `/testrun/${this.state.idTestRun}/run`
+              }
+            >
+              Start Run
+            </Run>
           </BtnWrapper>
           <Stats>
             <GraphContainer>
@@ -86,10 +114,12 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(
-  mapStateToProps,
-  null
-)(TestRunDetails)
+export default withRouter(
+  connect(
+    mapStateToProps,
+    null
+  )(TestRunDetails)
+)
 
 const StatData = styled.h2`
   font-size: 5rem;

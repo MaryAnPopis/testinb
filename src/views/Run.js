@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 
 import { current_run_case, index_case } from '../actions'
-import { getByParam } from '../services'
+import { getByParam, post } from '../services'
 import MenuBar from '../components/MenuBar'
 import Button from '../components/Button'
 import { colors } from '../styles/colors'
@@ -46,19 +46,30 @@ export class Run extends Component {
   }
 
   onResultCase(e) {
+    const result = e.target.id
     const leftIndexCase = this.props.indexCase + 1
     const totalCasesForRun = this.state.totalCasesToRun
+    const idTestSuite = this.state.idTestSuite
+    console.log('TOTAL', totalCasesForRun)
 
-    if (leftIndexCase + 1 > totalCasesForRun) {
-      this.props.history.goBack()
-    } else {
-      const idTestSuite = this.state.idTestSuite
-      getByParam('testcase/testsuite', idTestSuite).then(data => {
+    getByParam('testcase/testsuite', idTestSuite).then(data => {
+      const run = {
+        idTestSuite: idTestSuite,
+        idTestCase: data[this.props.indexCase].id,
+        idTestRun: this.state.idTestRun,
+        result: result,
+      }
+      console.log(run)
+      post('testrun/run', run)
+
+      if (leftIndexCase + 1 > totalCasesForRun) {
+        this.props.history.goBack()
+      } else {
+        // Go to the next test case
         this.props.setIndexCase(leftIndexCase)
         this.props.setCurrentCase(data[this.props.indexCase])
-      })
-    }
-    console.log(e.target.id)
+      }
+    })
   }
 
   render() {
